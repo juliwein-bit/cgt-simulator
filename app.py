@@ -447,19 +447,50 @@ for y in years_range:
     tax_current_list.append(t_current)
     tax_index_list.append(t_index)
 
-fig2, ax2 = plt.subplots()
+fig3, ax3 = plt.subplots(figsize=(10, 5))
 
-ax2.plot(years_range, tax_current_list, linestyle="--", label="Current System")
-ax2.plot(years_range, tax_index_list, label="Indexation")
+# Current system line
+ax3.plot(
+    years_range,
+    tax_current_list,
+    linestyle="--",
+    linewidth=2.5,
+    label="Current System"
+)
 
-ax2.set_xlabel("Years")
-ax2.set_ylabel("Tax Collected ($)")
-ax2.legend(frameon=False)
+# Indexation line
+ax3.plot(
+    years_range,
+    tax_index_list,
+    linewidth=3,
+    label="Indexation / Transition Model"
+)
 
-ax2.spines['top'].set_visible(False)
-ax2.spines['right'].set_visible(False)
+# Policy marker
+ax3.axvline(
+    policy_start,
+    linestyle=":",
+    linewidth=2,
+    label="Policy commencement"
+)
 
-st.pyplot(fig2)
+# Labels
+ax3.set_xlabel("Years Until Sale")
+ax3.set_ylabel("Estimated Tax Collected ($)")
+
+# Clean formatting
+ax3.yaxis.set_major_formatter(FuncFormatter(currency_formatter))
+
+# Styling
+ax3.spines['top'].set_visible(False)
+ax3.spines['right'].set_visible(False)
+
+ax3.tick_params(axis='both', which='major', labelsize=10)
+
+# Legend
+ax3.legend(frameon=False)
+
+st.pyplot(fig3)
 
 tax_current_selected, _ = cgt_current_growth(purchase_price, tax_rate, growth_rate, sell_year)
 tax_index_selected, _ = cgt_time_apportionment(
